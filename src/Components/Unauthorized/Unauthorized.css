@@ -1,0 +1,33 @@
+.unauthorized-container {
+  --size: clamp(150px,70vw,350px);
+  --svg-primary-color: #6C9BCF;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.unauthorized-bg-svg > svg {
+  max-width: var(--size);
+  max-height: var(--size);
+}
+
+.unauthorized-container p {
+  font-size: clamp(0.8rem,calc(3vw + .3rem),1.4rem);
+  padding: 0 10px;
+  text-align: center;
+}
+
+.unauthorized-container button{
+  background-color: var(--color-primary);
+          color: var(--color-white);
+          border: none;
+          padding: 10px 20px;
+          border-radius: var(--border-radius-1);
+          cursor: pointer;
+          font-family: Poppins, sans-serif;
+          font-weight: 600;
+}

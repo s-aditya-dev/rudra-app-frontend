@@ -1,0 +1,21 @@
+.maintenance-container {
+  --size: clamp(150px,70vw,250px);
+  --svg-primary-color: #6C9BCF;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.maintenance-bg-svg svg {
+  max-width: var(--size);
+  max-height: var(--size);
+}
+
+.maintenance-container p {
+  font-size: clamp(0.8rem,calc(3vw + 0.3rem),1.4rem);
+  text-align: center;
+  padding: 0 15px;
+}
