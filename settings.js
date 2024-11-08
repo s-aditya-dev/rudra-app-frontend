@@ -1,5 +1,5 @@
 export const frontEndPort = "https://rudra-app-frontend.vercel.app";
-export const backEndPort = "https://rudra-app-backend.vercel.app";
+export const backEndPort = "https://rudra-app-backend-i232.onrender.com";
 
 // local config.js
 // export const frontEndPort = "http://localhost:5173";
