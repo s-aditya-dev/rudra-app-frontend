@@ -31,7 +31,6 @@ const ClientDetails = () => {
     _id: "",
   });
 
-
   const mutation = useMutation({
     mutationFn: (id) => {
       return newRequest.delete(`/clients/${id}`);
@@ -99,8 +98,12 @@ const ClientDetails = () => {
     // Validate first and last names
     if (!client.firstName || !client.lastName) {
       tempErrors.name = "First and last names are required";
-    } else if (!nameRegex.test(client.firstName) || !nameRegex.test(client.lastName)) {
-      tempErrors.name = "Names must contain only letters and be at least 3 characters long";
+    } else if (
+      !nameRegex.test(client.firstName) ||
+      !nameRegex.test(client.lastName)
+    ) {
+      tempErrors.name =
+        "Names must contain only letters and be at least 3 characters long";
     } else {
       // Validate occupation
       if (!client.occupation) {
@@ -112,7 +115,6 @@ const ClientDetails = () => {
         } else if (!contactRegex.test(client.contact)) {
           tempErrors.contact = "Contact number must be exactly 10 digits";
         } else {
-
           if (client.altContact && !contactRegex.test(client.altContact)) {
             tempErrors.contact = "Please enter the valid alt contact";
           } else {
@@ -245,31 +247,40 @@ const ClientDetails = () => {
     }
   };
 
-
   const handleRowClick = (VisitId) => {
-    setActiveVisitId(prevVisitId => prevVisitId === VisitId ? null : VisitId);
+    setActiveVisitId((prevVisitId) =>
+      prevVisitId === VisitId ? null : VisitId,
+    );
   };
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    const day = String(date.getUTCDate()).padStart(2, '0');
-    const month = date.toLocaleString('en-GB', { month: 'short', timeZone: 'UTC' });
+    const day = String(date.getUTCDate()).padStart(2, "0");
+    const month = date.toLocaleString("en-GB", {
+      month: "short",
+      timeZone: "UTC",
+    });
     const year = String(date.getUTCFullYear()).slice(2);
 
     return `${day}-${month}-${year}`;
   };
 
-
-
   let count = 0;
 
   const lastVisit = visits[visits.length - 1] || [];
 
-  const loadPerms = currentUser.admin || currentUser.username === lastVisit.closingManager;
+  const loadPerms =
+    currentUser.admin ||
+    currentUser.username === lastVisit.closingManager ||
+    currentUser.username === lastVisit.sourcingManager;
 
   const [managers, setManagers] = useState([]);
 
-  const { isManagerLoading, isManagerError, data: ManagerData } = useQuery({
+  const {
+    isManagerLoading,
+    isManagerError,
+    data: ManagerData,
+  } = useQuery({
     queryKey: ["managers"],
     queryFn: () =>
       newRequest.get("/clientVisits/managers").then((res) => res.data),
@@ -286,11 +297,15 @@ const ClientDetails = () => {
   }
 
   if (error || isManagerError) {
-    return <Loader message={`Something went wrong: ${error?.message || isManagerError.message}`} />;
+    return (
+      <Loader
+        message={`Something went wrong: ${error?.message || isManagerError.message}`}
+      />
+    );
   }
 
   const getDisplayName = (username) => {
-    const manager = managers.find(m => m.username === username);
+    const manager = managers.find((m) => m.username === username);
     return manager ? manager.firstName : username;
   };
 
@@ -349,7 +364,9 @@ const ClientDetails = () => {
               onChange={handleInputChange}
               placeholder="Occupation"
             />
-            {errors.occupation && <span className="error">{errors.occupation}</span>}
+            {errors.occupation && (
+              <span className="error">{errors.occupation}</span>
+            )}
           </div>
         </div>
 
@@ -380,7 +397,9 @@ const ClientDetails = () => {
                     placeholder="Alt Number"
                   />
                 </div>
-                {errors.contact && <span className="error">{errors.contact}</span>}
+                {errors.contact && (
+                  <span className="error">{errors.contact}</span>
+                )}
               </div>
               <div className="email input-container full-flex">
                 <label htmlFor="email">Email:</label>
@@ -397,8 +416,6 @@ const ClientDetails = () => {
               </div>
             </>
           )}
-
-
 
           <div className="address input-container full-flex">
             <label htmlFor="address">Address:</label>
@@ -426,7 +443,6 @@ const ClientDetails = () => {
                 disabled={!isEditing}
                 onChange={handleInputChange}
               >
-
                 <option value="N/A">N/A</option>
                 <option value="1BHK">1BHK</option>
                 <option value="2BHK">2BHK</option>
@@ -436,7 +452,9 @@ const ClientDetails = () => {
                 <option value="SHOP">SHOP</option>
                 <option value="OFFICE">OFFICE</option>
               </select>
-              {errors.requirement && <span className="error">{errors.requirement}</span>}
+              {errors.requirement && (
+                <span className="error">{errors.requirement}</span>
+              )}
             </div>
             <div className="w-45 budget input-container">
               <label htmlFor="budget">Budget:</label>
@@ -451,7 +469,9 @@ const ClientDetails = () => {
                   onChange={handleInputChange}
                   placeholder="Budget"
                 />
-                {errors.budget && <span className="error">{errors.budget}</span>}
+                {errors.budget && (
+                  <span className="error">{errors.budget}</span>
+                )}
               </div>
             </div>
           </div>
@@ -504,9 +524,7 @@ const ClientDetails = () => {
               />
             </div>
           )}
-
         </div>
-
       </form>
 
       <div className="visit-table">
@@ -528,17 +546,37 @@ const ClientDetails = () => {
             {visits.map((visit, index) => (
               <tr
                 key={visit._id}
-                className={activeVisitId === visit._id ? 'active' : ''}
+                className={activeVisitId === visit._id ? "active" : ""}
               >
-                <td data-cell='Sr No.' onClick={() => handleRowClick(visit._id)}>{++count}</td>
-                <td data-cell='Date'>{formatDate(visit.date)}</td>
-                <td data-cell='Time'>{visit.time}</td>
-                <td data-cell='Reference By'>{visit.referenceBy}</td>
-                <td data-cell='Source'>{getDisplayName(visit.sourcingManager)}</td>
-                <td data-cell='Relation'>{getDisplayName(visit.relationshipManager)}</td>
-                <td data-cell='Closing' onClick={() => handleRowClick(visit._id)}>{getDisplayName(visit.closingManager)}</td>
-                <td data-cell='Status' onClick={() => handleRowClick(visit._id)} className={getStatusClass(visit.status)}>{visit.status}</td>
-                <td data-cell='Action' className="action-buttons">
+                <td
+                  data-cell="Sr No."
+                  onClick={() => handleRowClick(visit._id)}
+                >
+                  {++count}
+                </td>
+                <td data-cell="Date">{formatDate(visit.date)}</td>
+                <td data-cell="Time">{visit.time}</td>
+                <td data-cell="Reference By">{visit.referenceBy}</td>
+                <td data-cell="Source">
+                  {getDisplayName(visit.sourcingManager)}
+                </td>
+                <td data-cell="Relation">
+                  {getDisplayName(visit.relationshipManager)}
+                </td>
+                <td
+                  data-cell="Closing"
+                  onClick={() => handleRowClick(visit._id)}
+                >
+                  {getDisplayName(visit.closingManager)}
+                </td>
+                <td
+                  data-cell="Status"
+                  onClick={() => handleRowClick(visit._id)}
+                  className={getStatusClass(visit.status)}
+                >
+                  {visit.status}
+                </td>
+                <td data-cell="Action" className="action-buttons">
                   <div>
                     {currentUser.admin || index === visits.length - 1 ? (
                       <>
@@ -580,12 +618,11 @@ const ClientDetails = () => {
                               delete_forever
                             </span>
                           </button>
-
                         ) : null}
-                        <Link to={`/panel/client-details/${pageno}/${id}/remark/${visit._id}`}>
-                          <button
-                            className="edit yellow-btn"
-                          >
+                        <Link
+                          to={`/panel/client-details/${pageno}/${id}/remark/${visit._id}`}
+                        >
+                          <button className="edit yellow-btn">
                             <span className="material-symbols-rounded">
                               chevron_right
                             </span>
