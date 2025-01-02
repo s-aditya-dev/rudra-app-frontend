@@ -21,6 +21,7 @@ import ClientDetails from "./Sub Pages/Client Details/Client Details.jsx";
 import Remark from "./Sub Pages/Remark Details/Remark.jsx";
 import AddVisit from "./Sub Pages/AddVisit/AddVisit.jsx";
 import Report from "./Sub Pages/Report/Report.jsx";
+import { ReferenceForm } from "./Sub Pages/Reference Form";
 
 const Panel = () => {
   useEffect(() => {
@@ -76,6 +77,12 @@ const Panel = () => {
       roles: ["admin", "user", "tablet"],
     },
     {
+      name: "Reference Form",
+      path: "reference-form",
+      icon: "receipt_long",
+      roles: ["admin", "user", "tablet"],
+    },
+    {
       name: "Reports",
       path: "reports",
       icon: "report_gmailerrorred",
@@ -93,6 +100,7 @@ const Panel = () => {
     "dump-client-list": DumpedClients,
     "new-client-list": NewClients,
     "new-client-form": NewClientForm,
+    "reference-form": ReferenceForm,
     "client-details/:pageno/:id": ClientDetails,
     "client-details/:pageno/:id/remark/:remarkid": Remark,
     form: ClientListForm,
@@ -147,12 +155,12 @@ const Panel = () => {
     }
   });
 
-  const defaultComponent = Maintenance
+  const defaultComponent = Maintenance;
 
   // Determine the back path based on the current route
   const pathParts = location.pathname.split("/");
   let backPath = null;
-  
+
   if (pathParts.length > 3) {
     const secondSegment = pathParts[2];
     if (secondSegment === "client-details") {
@@ -167,7 +175,6 @@ const Panel = () => {
       }
     }
   }
-  
 
   return (
     <div className="container">

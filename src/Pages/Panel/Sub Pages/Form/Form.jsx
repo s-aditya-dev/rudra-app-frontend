@@ -3,6 +3,7 @@ import "./Form.css";
 import { useNavigate } from "react-router-dom";
 import newRequest from "../../../../utils/newRequest.js";
 import { useQuery } from "@tanstack/react-query";
+import { useCompanies } from "../../../../hook/use-company.jsx";
 
 const ClientListForm = () => {
   const { isLoading, error, data } = useQuery({
@@ -14,8 +15,12 @@ const ClientListForm = () => {
   });
 
   const [managers, setManagers] = useState([]);
+  const {
+    data: companies,
+    isLoading: isCompanyLoading,
+    error: isCompanyError,
+  } = useCompanies();
   const [isSubmitting, setIsSubmitting] = useState(false);
-
 
   useEffect(() => {
     if (data) {
@@ -81,7 +86,6 @@ const ClientListForm = () => {
   const handleBudgetTypeChange = (e) => {
     setBudgetType(e.target.value);
   };
-
 
   const validateForm = () => {
     const nameRegex = /^[A-Za-z]{3,}$/;
@@ -220,7 +224,7 @@ const ClientListForm = () => {
         ...visitsourceData,
       });
       alert("Submitted successfully!");
-      handleClear()
+      handleClear();
       setIsSubmitting(false);
     } catch (err) {
       console.log(err);
@@ -228,7 +232,6 @@ const ClientListForm = () => {
 
     e.target.reset();
   };
-
 
   const handleClear = () => {
     setUser({
@@ -369,9 +372,7 @@ const ClientListForm = () => {
                 id="requirement"
                 value={user.requirement}
               >
-                <option value="">
-                  Select Requirement
-                </option>
+                <option value="">Select Requirement</option>
                 <option value="N/A">N/A</option>
                 <option value="1BHK">1BHK</option>
                 <option value="2BHK">2BHK</option>
@@ -404,9 +405,7 @@ const ClientListForm = () => {
                 onChange={handleBudgetTypeChange}
                 value={budgetType}
               >
-                <option value="">
-                  Type
-                </option>
+                <option value="">Type</option>
                 <option value="K">K</option>
                 <option value="Lac">Lac</option>
                 <option value="Cr">Cr</option>
@@ -453,14 +452,44 @@ const ClientListForm = () => {
 
           <div className="reference-container flex-width-48 input-container">
             <label htmlFor="reference">Reference by:</label>
-            <input
+            {/* <input
               type="text"
               id="reference"
               name="referenceBy"
               onChange={handleVisitChange}
               placeholder="Enter Reference"
               value={visitsourceData.referenceBy}
-            />
+            /> */}
+            <select
+              id="reference"
+              name="referenceBy"
+              onChange={handleVisitChange}
+              value={visitsourceData.referenceBy}
+            >
+              <option value="">Select Reference</option>
+
+              <option value="N/A">N/A</option>
+              <option value="Walking">Walking</option>
+              {isCompanyLoading && (
+                <option value="Loading" disabled>
+                  Loading Companyies...
+                </option>
+              )}
+
+              {isCompanyError && (
+                <option value="error" disabled>
+                  Error occured...
+                </option>
+              )}
+
+              {companies?.map((company) => (
+                <option key={company.companyId} value={company.companyId}>
+                  {company.companyName}
+                </option>
+              ))}
+
+              {}
+            </select>
             {errors.referenceBy && (
               <span className="error">{errors.referenceBy}</span>
             )}
@@ -475,9 +504,7 @@ const ClientListForm = () => {
                 name="sourcingManager"
                 value={visitsourceData.sourcingManager}
               >
-                <option value="">
-                  Select Source
-                </option>
+                <option value="">Select Source</option>
 
                 <option value="N/A">N/A</option>
 
@@ -490,7 +517,7 @@ const ClientListForm = () => {
                       <option key={manager._id} value={manager.username}>
                         {manager.firstName} {manager.lastName}
                       </option>
-                    )
+                    ),
                 )}
               </select>
               {errors.sourcingManager && (
@@ -506,9 +533,7 @@ const ClientListForm = () => {
                 name="relationshipManager"
                 value={visitsourceData.relationshipManager}
               >
-                <option value="">
-                  Select Relation
-                </option>
+                <option value="">Select Relation</option>
 
                 <option value="N/A">N/A</option>
 
@@ -521,7 +546,7 @@ const ClientListForm = () => {
                       <option key={manager._id} value={manager.username}>
                         {manager.firstName} {manager.lastName}
                       </option>
-                    )
+                    ),
                 )}
               </select>
               {errors.relationshipManager && (
@@ -552,7 +577,7 @@ const ClientListForm = () => {
                       <option key={manager._id} value={manager.username}>
                         {manager.firstName} {manager.lastName}
                       </option>
-                    )
+                    ),
                 )}
               </select>
               {errors.closingManager && (
@@ -562,10 +587,13 @@ const ClientListForm = () => {
 
             <div className="status-container sp-w-100 w-48 input-container">
               <label htmlFor="status">Status:</label>
-              <select id="status" onChange={handleVisitChange} name="status" value={visitsourceData.status}>
-                <option value="">
-                  Select Status
-                </option>
+              <select
+                id="status"
+                onChange={handleVisitChange}
+                name="status"
+                value={visitsourceData.status}
+              >
+                <option value="">Select Status</option>
 
                 <option value="N/A">N/A</option>
                 <option value="hot">Hot</option>
@@ -591,7 +619,9 @@ const ClientListForm = () => {
         </div>
 
         <div className="controls form-buttons w-100 flex">
-          <button type="button" onClick={handleClear}>Clear</button>
+          <button type="button" onClick={handleClear}>
+            Clear
+          </button>
 
           <button
             className="submit-button"

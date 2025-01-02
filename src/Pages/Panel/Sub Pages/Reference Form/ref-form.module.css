@@ -1,0 +1,87 @@
+.formContainer {
+  height: 100%;
+  width: 100%;
+  background: var(--color-white);
+  box-shadow: var(--box-shadow);
+  border-radius: var(--card-border-radius);
+  display: grid;
+  justify-content: center;
+  align-items: start;
+  gap: 1rem;
+  padding: 20px min(10%, 10vh) 50px;
+
+  h3 {
+    width: 100%;
+    text-align: center;
+    font-weight: 800;
+    font-size: clamp(1.2rem, calc(2vw + 1rem), 1.8rem);
+    padding: 10px 25px;
+    text-decoration-line: underline;
+    text-decoration-thickness: 3px;
+  }
+}
+
+.footer {
+  display: grid;
+  place-items: center;
+}
+
+.button {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border: none;
+  padding: 10px 20px;
+  border-radius: var(--border-radius-1);
+  cursor: pointer;
+  width: 150px;
+}
+
+.button:hover {
+  background-color: var(--color-primary-dark);
+}
+
+.main-field-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.field-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.inputBox {
+  padding: 10px;
+  background: var(--color-white);
+  color: var(--color-dark);
+  border: 2px solid var(--color-info-dark);
+  border-radius: var(--border-radius-1);
+  width: 100%;
+  position: relative;
+}
+
+.error {
+  color: red;
+  font-size: 1.3rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.inputContainer {
+  gap: 10px;
+  display: flex;
+  flex-direction: row;
+}
+
+@media (width < 450px) {
+  .inputContainer {
+    flex-direction: column;
+  }
+
+  .field-container,
+  .main-field-container {
+    gap: 10px;
+  }
+}

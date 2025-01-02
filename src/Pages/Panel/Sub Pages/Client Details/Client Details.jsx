@@ -3,6 +3,7 @@ import { useNavigate, useParams, Link } from "react-router-dom";
 import newRequest from "../../../../utils/newRequest.js";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import "./Client Details.css";
+import { useCompanies } from "../../../../hook/use-company.jsx";
 
 import AddVisitModal from "../AddVisit/AddVisit.jsx";
 import EditVisitModal from "../EditVisit/EditVisit.jsx";
@@ -13,6 +14,11 @@ const ClientDetails = () => {
   const { pageno } = useParams();
   const { id } = useParams();
   const queryClient = useQueryClient();
+  const {
+    data: companies,
+    isLoading: isCompanyLoading,
+    error: isCompanyError,
+  } = useCompanies();
 
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
@@ -309,6 +315,12 @@ const ClientDetails = () => {
     return manager ? manager.firstName : username;
   };
 
+  const getCompanyName = (id, companies) => {
+    let company = null;
+    if (companies) company = companies.find((m) => m.companyId == id);
+    return company ? company.companyName : id;
+  };
+
   return (
     <div className="details-container">
       <form className="details-form">
@@ -556,7 +568,9 @@ const ClientDetails = () => {
                 </td>
                 <td data-cell="Date">{formatDate(visit.date)}</td>
                 <td data-cell="Time">{visit.time}</td>
-                <td data-cell="Reference By">{visit.referenceBy}</td>
+                <td data-cell="Reference By">
+                  {getCompanyName(visit.referenceBy, companies)}
+                </td>
                 <td data-cell="Source">
                   {getDisplayName(visit.sourcingManager)}
                 </td>

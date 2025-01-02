@@ -1,6 +1,12 @@
 export const getDisplayName = (username, managers) => {
-  const manager = managers.find(m => m.username === username);
+  const manager = managers.find((m) => m.username === username);
   return manager ? manager.firstName : username;
+};
+
+export const getCompanyName = (id, companies) => {
+  let company = null;
+  if (companies) company = companies.find((m) => m.companyId == id);
+  return company ? company.companyName : id;
 };
 
 export const searchFields = (client, term, managers) => {
@@ -10,14 +16,27 @@ export const searchFields = (client, term, managers) => {
 
   return (
     fullName.includes(termLower) ||
-    (client.requirement && client.requirement.toLowerCase().includes(termLower)) ||
-    (client.budget && client.budget.toString().toLowerCase().includes(termLower)) ||
+    (client.requirement &&
+      client.requirement.toLowerCase().includes(termLower)) ||
+    (client.budget &&
+      client.budget.toString().toLowerCase().includes(termLower)) ||
     (lastVisit &&
-      ((lastVisit.referenceBy && lastVisit.referenceBy.toLowerCase().includes(termLower)) ||
-        (lastVisit.sourcingManager && getDisplayName(lastVisit.sourcingManager, managers).toLowerCase().includes(termLower)) ||
-        (lastVisit.relationshipManager && getDisplayName(lastVisit.relationshipManager, managers).toLowerCase().includes(termLower)) ||
-        (lastVisit.closingManager && getDisplayName(lastVisit.closingManager, managers).toLowerCase().includes(termLower)) ||
-        (lastVisit.status && lastVisit.status.toLowerCase().includes(termLower))))
+      ((lastVisit.referenceBy &&
+        lastVisit.referenceBy.toLowerCase().includes(termLower)) ||
+        (lastVisit.sourcingManager &&
+          getDisplayName(lastVisit.sourcingManager, managers)
+            .toLowerCase()
+            .includes(termLower)) ||
+        (lastVisit.relationshipManager &&
+          getDisplayName(lastVisit.relationshipManager, managers)
+            .toLowerCase()
+            .includes(termLower)) ||
+        (lastVisit.closingManager &&
+          getDisplayName(lastVisit.closingManager, managers)
+            .toLowerCase()
+            .includes(termLower)) ||
+        (lastVisit.status &&
+          lastVisit.status.toLowerCase().includes(termLower))))
   );
 };
 
@@ -33,13 +52,15 @@ export const formatBudget = (amount) => {
 
 export const formatDate = (dateString) => {
   const date = new Date(dateString);
-  const day = String(date.getUTCDate()).padStart(2, '0');
-  const month = date.toLocaleString('en-GB', { month: 'short', timeZone: 'UTC' });
+  const day = String(date.getUTCDate()).padStart(2, "0");
+  const month = date.toLocaleString("en-GB", {
+    month: "short",
+    timeZone: "UTC",
+  });
   const year = String(date.getUTCFullYear()).slice(2);
 
   return `${day}-${month}-${year}`;
 };
-
 
 export const getStatusClass = (status) => {
   switch (status) {

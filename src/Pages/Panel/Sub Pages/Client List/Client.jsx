@@ -76,7 +76,7 @@ function ClientList() {
         .get(
           currentUser.admin || currentUser.manager === "sales head"
             ? "/clients"
-            : `/user-clients?managerType=${currentUser.manager}&firstName=${currentUser.username}`
+            : `/user-clients?managerType=${currentUser.manager}&firstName=${currentUser.username}`,
         )
         .then((res) => res.data)
         .catch((error) => {
@@ -113,7 +113,7 @@ function ClientList() {
 
   const handleRowClick = (clientId) => {
     setActiveClientId((prevClientId) =>
-      prevClientId === clientId ? null : clientId
+      prevClientId === clientId ? null : clientId,
     );
   };
 
@@ -501,7 +501,7 @@ function ClientList() {
           {currentPage >= 1 && currentPage <= npages
             ? `Record Count: ${firstIndex + 1}-${Math.min(
                 lastIndex,
-                filteredClients.length
+                filteredClients.length,
               )} of ${filteredClients.length}`
             : "Records: 0 of 0"}
         </div>
