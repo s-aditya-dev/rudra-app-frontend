@@ -452,15 +452,15 @@ const ClientListForm = () => {
 
           <div className="reference-container flex-width-48 input-container">
             <label htmlFor="reference">Reference by:</label>
-            {/* <input
+            <input
               type="text"
               id="reference"
               name="referenceBy"
               onChange={handleVisitChange}
               placeholder="Enter Reference"
               value={visitsourceData.referenceBy}
-            /> */}
-            <select
+            />
+            {/* <select
               id="reference"
               name="referenceBy"
               onChange={handleVisitChange}
@@ -489,7 +489,7 @@ const ClientListForm = () => {
               ))}
 
               {}
-            </select>
+            </select> */}
             {errors.referenceBy && (
               <span className="error">{errors.referenceBy}</span>
             )}
